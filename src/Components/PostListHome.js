@@ -1,13 +1,40 @@
-import React from "react";
-import { View, Image, Text, StyleSheet, TouchableOpacity, FlatList, Dimensions } from "react-native";
+import React, {useState} from "react";
+import { View, Image, Text, StyleSheet, TouchableOpacity, FlatList, Dimensions, Button } from "react-native";
 import { FakeImagesData } from '../FakePicturesData'
 import { FakePostData } from '../FakePostData'
 import { Feather } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { Fontisto } from '@expo/vector-icons';
+// import AlignItemsList from './AlignItemsList'
+
 
 
 export default function PostListHome(props) {
+
+
+    function LikeButton() {
+        const [isLiked, setIsLiked] = useState(true);
+    
+        function clickHandler() {
+          setIsLiked(!isLiked);
+        }
+    
+        const like = {
+            color: "#ff0000"
+        };
+        const desLike = {
+            color: "#000"
+        }
+        return(
+            <View>
+                {isLiked?
+                    <AntDesign name="hearto" onPress={clickHandler} size={24} color="black" style={isLiked ? like : null, {marginLeft: 10}}/>
+                    :
+                    <AntDesign name="heart" onPress={clickHandler} size={24} color="red" style={isLiked ? desLike : null,{marginLeft: 10}}/>
+                }
+            </View>
+        )
+    }
 
     const Story = (props) => {
         return(
@@ -19,22 +46,28 @@ export default function PostListHome(props) {
                     </View>
                     <Feather name="more-horizontal" size={24} color="black"/>                    
                 </View>
-
+                <View>
+                    
+                </View>
                 <View>
                     <Image source={{uri: props.image}} style={styles.image}/>
+                    
+                    
                 </View>
 
             <View style={{flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10}}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <AntDesign name="hearto" size={24} color="black"  style={{marginLeft: 10}}/>
+                    <LikeButton />
                     <Feather name="message-circle" size={24} color="black"  style={{marginLeft: 10}}/>
                     <Feather name="send" size={24} color="black" style={{marginLeft: 10}} />
                 </View>
+                
                 <View>
+                
+                
                     <Fontisto name="favorite" size={28} color="black" style={{marginRight: 10}}/>
                 </View>    
             </View>
-                <Text style={{fontWeight: 'bold', marginLeft: 10}}>{props.likes} Likes</Text>
                 <Text style={{marginLeft: 10, marginBottom: 15}}>{props.title}</Text>
             </View>
         )
@@ -46,8 +79,17 @@ export default function PostListHome(props) {
                 data={FakePostData}
                 renderItem={({item}) => <Story image={item.image} title={item.title} likes= {item.likes} username= {item.user.first_name}/>}
                 keyExtractor={(item, index) => index.toString()}
-                showsHorizontalScrollIndicator={false}
+                showsHorizontalScrollIndicator={true}
+                
             />
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <LikeButton />
+                    {/* <AlignItemsList/> */}
+                    <Feather name="message-circle" size={24} color="black"  style={{marginLeft: 10}}/>
+                    <Feather name="send" size={24} color="black" style={{marginLeft: 10}} />
+                </View>
+                
+                
         </View>
     )
 }
